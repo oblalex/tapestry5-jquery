@@ -128,8 +128,13 @@
 			if (icon) icon.show();
 
 			var id = field.attr('id')+"\\:errorpopup";
-			if($("#"+id).size()==0) //if the errorpopup isn't on the page yet, we create it
-				field.after("<div id='"+field.attr('id')+":errorpopup' class='tjq-error-popup'/>");
+			if($("#"+id).size()==0){ //if the errorpopup isn't on the page yet, we create it
+                            var errorHolder = $("#clerror_"+field.attr('id'));
+                            if (errorHolder.length==0){
+                                errorHolder = field;
+                            }
+                            errorHolder.after("<div id='"+field.attr('id')+":errorpopup' class='tjq-error-popup'/>");
+                        }
 			Tapestry.ErrorPopup.show($("#"+id),"<span>"+message+"</span>");
 
 		},
