@@ -100,7 +100,27 @@
 	
 			this.getIcon() && this.getIcon().hide();
 			
-			Tapestry.ErrorPopup.hide($("#"+field.attr('id')+"\\:errorpopup"));
+                        var errorPopup = $("#"+field.attr('id')+"\\:errorpopup");                        
+                        var errorHolder = $("#clerror_"+field.attr('id')); 
+                        
+                        if (errorHolder.length!=0){
+                            Tapestry.ErrorPopup.hide(errorPopup);
+                            errorHolder.hide();                            
+                        } else {                         
+                            var wrapper = $("#wrap_clerrors_"+field.closest('form').attr('id'));
+                            if (wrapper.length!=0){
+                                var errorPopupLi = errorPopup.parent();
+                                var errorPopupUl = errorPopupLi.parent();
+                                Tapestry.ErrorPopup.hide(errorPopup);
+                                errorPopupLi.remove();
+                                if (errorPopupUl.children().length==0){
+                                    wrapper.hide();
+                                    errorPopupUl.remove();
+                                }
+                            } else {
+                                Tapestry.ErrorPopup.hide(errorPopup);
+                            }
+                        }                                                
 		},
 	
 		/**
@@ -117,8 +137,7 @@
 			
 			this.options.validationError = true;
 			form.formEventManager("setValidationError", true);
-			
-	
+				
 			field.addClass("t-error");
 	
 			this.getLabel() && this.getLabel().addClass("t-error");
@@ -128,12 +147,50 @@
 			if (icon) icon.show();
 
 			var id = field.attr('id')+"\\:errorpopup";
-			if($("#"+id).size()==0){ //if the errorpopup isn't on the page yet, we create it
-                            var errorHolder = $("#clerror_"+field.attr('id'));
-                            if (errorHolder.length==0){
-                                errorHolder = field;
+                        var form_id = field.closest('form').attr('id');
+                        
+                        var errorHolder = $("#clerror_"+field.attr('id'));                        
+                        var wrapper = $("#wrap_clerrors_"+form_id);
+                        
+			if ($('#'+id).length!=0){
+                            if (errorHolder.length!=0){
+                                errorHolder.show();
+                            } else {
+                                if (wrapper.length!=0){
+                                    wrapper.show();
+                                } 
                             }
-                            errorHolder.after("<div id='"+field.attr('id')+":errorpopup' class='tjq-error-popup'/>");
+                        } else { //if the errorpopup isn't on the page yet, we create it
+                                   
+                            /*
+                             * Priority:
+                             * 1. t:error
+                             * 2. t:errors
+                             * 3. after-field
+                             */       
+                                   
+                            var errorPopupDefine = "<div id='"+field.attr('id')+":errorpopup' class='tjq-error-popup'/>";
+                            
+                            if (errorHolder.length!=0){
+                                errorHolder.show();
+                                errorHolder.append(errorPopupDefine);
+                            } else { // no <t:clerror> was found
+                                                                
+                                if (wrapper.length==0){ // no <t:clerrors> was found
+                                    field.after(errorPopupDefine);
+                                } else {
+                                    
+                                    var list_id = "clerrorlist_"+form_id;
+                                    var list = $('#'+list_id);
+                                    
+                                    if (list.length==0){
+                                        wrapper.show();
+                                        $("#banner_clerrors_"+form_id).after("<ul id='"+list_id+"'></ul>");
+                                        list = $('#'+list_id);
+                                    }                                        
+                                    list.append("<li>"+errorPopupDefine+"</li>");
+                                }
+                            }                                                        
                         }
 			Tapestry.ErrorPopup.show($("#"+id),"<span>"+message+"</span>");
 

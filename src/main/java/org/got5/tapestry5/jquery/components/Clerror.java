@@ -16,14 +16,14 @@
 package org.got5.tapestry5.jquery.components;
 
 import org.apache.tapestry5.*;
-import org.apache.tapestry5.annotations.HeartbeatDeferred;
-import org.apache.tapestry5.annotations.Parameter;
+import org.apache.tapestry5.annotations.*;
 import org.apache.tapestry5.dom.Element;
 
 /**
  *
  * @author bitterman
  */
+@Import(stylesheet = {"${assets.path}/components/clerror/clerror.css"})
 public class Clerror {
 
     /**
@@ -32,11 +32,12 @@ public class Clerror {
     @Parameter(name = "for", required = true, allowNull = false, defaultPrefix = BindingConstants.COMPONENT)
     private Field field;
     
+    @Parameter(name = "class")
+    private String className = "tjq-clerror";
+    
     void beginRender(final MarkupWriter writer) {        
-        Element element = writer.element("div");
-
+        Element element = writer.element("div", "class", className);
         updateElement(element);
-
         writer.end();
     }
 

@@ -1,0 +1,12 @@
+.tjq-clerrors{
+    display: none;
+}
+
+.tjq-clerrors .t-error UL LI DIV {
+    background-color: inherit;
+    color: inherit;
+    font-weight: inherit;
+    display: block;
+    margin: 0px;
+    padding: 0px;
+}
