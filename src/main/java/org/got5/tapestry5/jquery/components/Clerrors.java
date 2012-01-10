@@ -17,20 +17,13 @@ package org.got5.tapestry5.jquery.components;
 
 import org.apache.tapestry5.*;
 import org.apache.tapestry5.annotations.*;
-import org.apache.tapestry5.dom.Element;
-import org.apache.tapestry5.ioc.Configuration;
-import org.apache.tapestry5.ioc.Messages;
-import org.apache.tapestry5.ioc.annotations.Inject;
 
 /**
  *
  * @author bitterman
  */
 @Import(stylesheet = {"${assets.path}/components/clerrors/clerrors.css"})
-public class Clerrors {
-    
-    @Inject
-    private Messages messages;
+public class Clerrors {    
     
     /**
      * The banner message displayed above the errors.
