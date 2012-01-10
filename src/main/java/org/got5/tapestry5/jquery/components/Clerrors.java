@@ -39,7 +39,7 @@ public class Clerrors {
     private String banner;
 
     @Parameter(name = "wrapperclass")
-    private String wrapperClassName = "tjq-clerrors";
+    private String wrapperClassName = "t-invisible";
     
     @Parameter(name = "class")
     private String className = CSSClassConstants.ERROR;

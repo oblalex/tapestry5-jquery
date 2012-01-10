@@ -1,8 +1,4 @@
-.tjq-clerrors{
-    display: none;
-}
-
-.tjq-clerrors .t-error UL LI DIV {
+.t-error UL LI DIV {
     background-color: inherit;
     color: inherit;
     font-weight: inherit;
