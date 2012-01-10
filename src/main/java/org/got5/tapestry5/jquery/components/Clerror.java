@@ -33,7 +33,7 @@ public class Clerror {
     private Field field;
     
     @Parameter(name = "class")
-    private String className = "tjq-clerror";
+    private String className = "t-invisible";
     
     void beginRender(final MarkupWriter writer) {        
         Element element = writer.element("div", "class", className);
