@@ -43,11 +43,7 @@ public class Clerrors {
     
     @Parameter(name = "class")
     private String className = CSSClassConstants.ERROR;
-    
-    public void contributeValidationMessagesSource(Configuration<String> configuration) {
-        configuration.add("path/to/your/package/ValidationMessages.properties");
-    }
-    
+
     void beginRender(MarkupWriter writer){
         String formId = writer.getElement().getAttribute("id");
         
