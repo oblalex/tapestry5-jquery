@@ -51,19 +51,12 @@ public class Clerrors {
     void beginRender(MarkupWriter writer){
         String formId = writer.getElement().getAttribute("id");
         
-        Element el_wrapper = writer.element("div", "class", wrapperClassName);
-        el_wrapper.forceAttributes("id", "wrap_clerrors_"+formId);
-        
-            Element el_body = writer.element("div", "class", className);
-            el_body.forceAttributes("id", "clerrors_"+formId);
-
-                Element el_banner = writer.element("div", "class", "t-banner");
-                el_banner.forceAttributes("id", "banner_clerrors_"+formId);
+        writer.element("div", "class", wrapperClassName, "id", "wrap_clerrors_"+formId);        
+            writer.element("div", "class", className, "id", "clerrors_"+formId);
+                writer.element("div", "class", "t-banner", "id", "banner_clerrors_"+formId);
                 writer.write(banner);
                 writer.end();            
-
-            writer.end();
-            
+            writer.end();            
         writer.end();
     }
 }
