@@ -9,6 +9,9 @@ import org.apache.tapestry5.json.JSONObject;
 import org.got5.tapestry5.jquery.internal.DataTableModel;
 import org.got5.tapestry5.jquery.internal.TableInformation;
 
+/**
+ * @tapestrydoc
+ */
 public abstract class AbstractJQueryTable extends AbstractTable{
 
 	/**
@@ -63,8 +66,9 @@ public abstract class AbstractJQueryTable extends AbstractTable{
 	 * the default implementation
 	 */
 	public DataTableModel getDataTModel() {
-		if (resources.isBound("dataTableModel"))
+		if (resources.isBound("dataTableModel")){
 			return getDataTableModel();
+		}
 		return getDefaultDataTableModel();
 	}
 	protected abstract DataTableModel getDefaultDataTableModel();

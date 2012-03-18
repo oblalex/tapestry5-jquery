@@ -43,7 +43,7 @@ public class JQuerySymbolConstants {
     /**
      * Base path for jQuery validation plugin.
      *
-     * @see http://docs.jquery.com/Plugins/Validation
+     * @see <a href="http://docs.jquery.com/Plugins/Validation">jQuery Validation mecanism</a>
      */
     public static final String JQUERY_VALIDATE_PATH = "jquery.validate.path";
     
@@ -65,5 +65,7 @@ public class JQuerySymbolConstants {
 	public static final String JQUERY_ALIAS = "jquery.alias";
 	
 	public static final String PROTOTYPE_STACK = "prototype.js.stack";
+	
+	public static final String PARAMETER_PREFIX = "parameter.prefix";
     
 }

@@ -2,7 +2,6 @@ package org.got5.tapestry5.jquery.services;
 
 import org.apache.tapestry5.Asset;
 import org.apache.tapestry5.SymbolConstants;
-import org.apache.tapestry5.annotations.AfterRender;
 import org.apache.tapestry5.annotations.SetupRender;
 import org.apache.tapestry5.func.F;
 import org.apache.tapestry5.func.Flow;
@@ -109,14 +108,10 @@ public class ImportJQueryUIWorker implements ComponentClassTransformWorker2
     {
         public String map(String name)
         {
-        	if(InternalUtils.isBlank(name)) 
-        		throw new TapestryException(TapestryJQueryExceptionMessages.importJQueryUiMissingValue(), null);
-        	
-            final StringBuilder relativePath = new StringBuilder()
+        	final StringBuilder relativePath = new StringBuilder()
                 .append(productionMode ? "/minified/" : "/")
                 .append(name)
                 .append(productionMode ? ".min.js" : ".js");
-
             return jqueryUIBase + relativePath.toString();
         }
     };
@@ -135,8 +130,8 @@ public class ImportJQueryUIWorker implements ComponentClassTransformWorker2
     private final Worker<Asset> importLibrary = new Worker<Asset>()
     {
         public void work(Asset value)
-        {
-            javaScriptSupport.importJavaScriptLibrary(value);
+        {  
+        	javaScriptSupport.importJavaScriptLibrary(value);
         }
     };
 

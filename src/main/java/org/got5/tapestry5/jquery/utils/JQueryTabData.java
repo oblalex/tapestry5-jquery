@@ -1,5 +1,8 @@
 package org.got5.tapestry5.jquery.utils;
 
+/**
+ * @deprecated will be deleted to Tapestry5-jQuery 4.0.0
+ */
 public class JQueryTabData {
 	
 	private String title;
@@ -14,7 +17,7 @@ public class JQueryTabData {
 	public String getTitle() {
 		return title;
 	}
-
+	
 	public void setTitle(String title) {
 		this.title = title;
 	}

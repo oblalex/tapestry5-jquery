@@ -164,13 +164,17 @@ T5.extendInitializers({
     	$.each(spec.addRowTriggers, function(index, triggerId) {
             
             $("#" + triggerId).click(function(event) {
-                $("#" + spec.rowInjector).tapestryFormInjector("trigger");
+               
+            	$("#" + spec.rowInjector).tapestryFormInjector("trigger");
+                
                 return false;
             })
         });
     }, 
     
     formLoopRemoveLink: function(spec) {
+    	
+    	
         defaults = {
             effect: "blind"
         };
@@ -194,6 +198,9 @@ T5.extendInitializers({
                     var options = {};
                    
                     container.fadeOut('slow', function() {
+                    	
+                    	$(this).trigger(Tapestry.AJAXFORMLOOP_ROW_REMOVED);
+                    	
                     	$(this).remove();
                     });
                 }
@@ -348,7 +355,7 @@ T5.extendInitializers({
             	if (el.is('select') && element.value) {
     				parameters["t:selectvalue"] = element.value;
     			}
-            	zoneElement.tapestryZone("update" , {url : url, parameters:parameters});
+            	zoneElement.tapestryZone("update" , {url : url, params : parameters});
 
     		});
         }
@@ -394,88 +401,6 @@ T5.extendInitializers({
     	 	form.formEventManager("setSubmittingElement", clientId);
     	 	form.submit();
     	});
-    },
-    
-	/**
-	 * 
-	 * @param spec.action 
-	 *             the event-link-url
-	 * @param spec.params
-	 *             
-	 * @param spec.messages
-     *             localized messages
-	 * 
-	 * @param spec.multiple 
-	 *             enables multiple file upload if possible. (default: true)            
-	 * 
-	 * @param spec.maxConnections
-	 *             maximum number of parallel connections. (default: 3)
-	 * 
-	 * @param spec.allowedExtensions
-	 *             Array of file allowed extensions. Accept all files if emtpy (default)
-     * 
-     * @param spec.sizeLimit
-     *              
-     * @param spec.minSizeLimit
-     * 
-     * @param spec.showMessagesDialog
-     *              The id of the error message dialog.
-	 */
-	uploadable: function(spec) {
-        
-		var el = $('#' + spec.elementId);
-		
-		$.extend(spec, {
-			showMessage: function(message) {
-
-				$('#' + spec.showMessagesDialog).text(message).dialog('open');
-
-			},
-
-			onComplete: function(id, fileName, responseJSON){
-				
-				if (responseJSON.zones) {
-
-                    // perform multi zone update
-                    $.each(responseJSON.zones, function(zoneId){
-
-                        $('#' + zoneId).tapestryZone("applyContentUpdate", responseJSON.zones[zoneId]);
-                    });
-
-                    $.tapestry.utils.loadScriptsInReply(responseJSON);
-                }
-				
-				if (responseJSON.updateZone) {
-
-					var spec = { 
-							url : responseJSON.updateZone.url, 
-							params : responseJSON.updateZone.params
-					};
-
-					$('#' + responseJSON.updateZone.zoneId).tapestryZone("update", spec);
-				}
-
-			}, 
-			
-            template: '<div class="qq-uploader">' +
-                '<div class="qq-upload-drop-area"><span>' + spec.messages.dropAreaLabel + ' </span></div>' +
-                '<a class="qq-upload-button btn">' + spec.messages.uploadLabel + '</a>' +
-                '<ul class="qq-upload-list"></ul>' +
-                '</div>',
-
-            // template for one item in file list
-            fileTemplate: '<li>' +
-                    '<span class="qq-upload-file"></span>' +
-                    '<span class="qq-upload-spinner"></span>' +
-                    '<span class="qq-upload-size"></span>' +
-                    '<a class="qq-upload-cancel" href="#">' + spec.messages.cancelLabel + ' </a>' +
-                    '<span class="qq-upload-failed-text">' + spec.messages.failedLabel + '</span>' +
-                    '</li>'
-			
-		});
-		
-        el.fileuploader(spec);
-        
     }
 });
 
@@ -688,14 +613,11 @@ $.widget( "ui.tapestryZone", {
 			$.extend(specs.params, this.options.parameters);
 		}
 
-		if (specs.params) {
-			$.extend(ajaxRequest, {
-                data: specs.params
-            });
-        }
-		
-        $.tapestry.utils.ajaxRequest(ajaxRequest);
-    }, 
+    $.extend(ajaxRequest, {
+		  data: specs.params ? $.extend(specs.params, {'t:zoneid': this.element.attr("id")}) : {'t:zoneid': this.element.attr("id")}
+    });
+    $.tapestry.utils.ajaxRequest(ajaxRequest);
+  },
 	
 	/**
 	 * Updates the element's content and triggers the appropriate effect on the
@@ -705,7 +627,7 @@ $.widget( "ui.tapestryZone", {
 	 */
 	applyContentUpdate: function(content) {
 
-		if (!content) {
+		if (content === null) {
 			$().log("WARN: content is undefined. Aborting update for zone: " + this.element.attr("id"));
 			return;
 		}
@@ -793,6 +715,8 @@ $.widget( "ui.tapestryFormInjector", {
                 newElement = that.options.below ? el.after(newElement) : el.before(newElement);
                 
                 newElement.effect(that.options.show);
+                
+                newElement.trigger(Tapestry.AJAXFORMLOOP_ROW_ADDED);
             });
             
         };
@@ -918,14 +842,8 @@ $.tapestry = {
             var redirectURL = reply.redirectURL;
             
             if (redirectURL) {
-                // Check for complete URL.
-                if (/^https?:/.test(redirectURL)) {
-                    window.location = redirectURL;
-                    return;
-                }
-                
-                window.location.pathname = redirectURL;
-                
+                window.location = redirectURL;
+
                 // Don't bother loading scripts or invoking the callback.
                 return;
             }
